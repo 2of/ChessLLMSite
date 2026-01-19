@@ -1,0 +1,284 @@
+/* Import Google Font - Newspaper style */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap');
+
+:root {
+  /* Monochrome Palette - Newspaper Theme */
+  --color-bg-primary: #f5f3ef;
+  --color-bg-secondary: #eae6df;
+  --color-bg-tertiary: #d8d3c9;
+
+  /* Ink Colors */
+  --color-ink-black: #1a1a1a;
+  --color-ink-dark: #2d2d2d;
+  --color-ink-medium: #555555;
+  --color-ink-light: #888888;
+  --color-ink-faint: #b0b0b0;
+
+  /* Paper tones */
+  --color-paper-white: #fdfcfa;
+  --color-paper-cream: #f8f6f1;
+  --color-paper-aged: #e8e4db;
+
+  /* Chessboard Colors - Classic monochrome */
+  --color-square-light: #f0ebe3;
+  --color-square-dark: #8b8680;
+  --color-square-selected: #c9c4b8;
+  --color-square-hover: rgba(0, 0, 0, 0.08);
+
+  /* Board Frame - Dark wood / ebony feel */
+  --color-board-frame: #1a1a1a;
+  --color-board-frame-inner: #2d2d2d;
+
+  /* Move Indicators */
+  --color-move-indicator: rgba(0, 0, 0, 0.4);
+  --color-capture-indicator: #1a1a1a;
+
+  /* Text Colors */
+  --color-text-primary: var(--color-ink-black);
+  --color-text-secondary: var(--color-ink-medium);
+  --color-text-muted: var(--color-ink-light);
+
+  /* Borders & Accents */
+  --color-border: rgba(0, 0, 0, 0.15);
+  --color-border-strong: rgba(0, 0, 0, 0.25);
+  --color-accent-primary: var(--color-ink-black);
+  --color-accent-secondary: var(--color-ink-dark);
+  /* Glass Effect - Subtle for newspaper feel */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.12);
+  --glass-blur: blur(8px);
+  /* Semantic Color System */
+  /* Default (Light) Scheme - "Paper & Ink" */
+
+  /* Backgrounds */
+  --bg-primary: #f8f5f2;
+  /* warm cream */
+  --bg-secondary: #ffffff;
+  /* white paper */
+  --bg-tertiary: #efebe6;
+  /* darker cream for hovers */
+  --bg-modal: rgba(255, 255, 255, 0.65);
+
+  /* Text / Ink */
+  --text-primary: #1a1a1a;
+  /* rich black */
+  --text-secondary: #5e5e5e;
+  /* medium grey */
+  --text-tertiary: #8c8c8c;
+  /* light grey */
+  --text-inverse: #f8f5f2;
+  /* cream (for dark bg) */
+
+  /* Borders */
+  --border-color: #e0dbd5;
+  --border-focus: #1a1a1a;
+
+  /* Accents */
+  --accent-primary: #1a1a1a;
+  --accent-secondary: #d4a373;
+  /* warm bronze - optional */
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.12);
+  --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.25);
+
+  /* Legacy Mappings (to support existing code incrementally) */
+  --color-paper-cream: var(--bg-primary);
+  --color-paper-white: var(--bg-secondary);
+  --color-ink-black: var(--text-primary);
+  --color-ink-medium: var(--text-secondary);
+  --color-ink-light: var(--text-tertiary);
+  --color-border: var(--border-color);
+
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark Mode Overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* "Slate & Chalk" */
+
+    /* Backgrounds */
+    --bg-primary: #121212;
+    /* dark slate */
+    --bg-secondary: #1e1e1e;
+    /* slightly lighter for cards */
+    --bg-tertiary: #2a2a2a;
+    /* hover states */
+    --bg-modal: rgba(30, 30, 30, 0.75);
+
+    /* Text / Ink */
+    --text-primary: #e6e6e6;
+    /* chalk white */
+    --text-secondary: #a0a0a0;
+    /* grey */
+    --text-tertiary: #666666;
+    --text-inverse: #121212;
+    /* dark for light badges */
+
+    /* Borders */
+    --border-color: #333333;
+    --border-focus: #e6e6e6;
+
+    /* Accents */
+    --accent-primary: #e6e6e6;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.5);
+    --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.6);
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* Subtle paper texture effect - Adjusted for dark mode compatibility */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    repeating-linear-gradient(0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.01) 2px,
+      rgba(0, 0, 0, 0.01) 4px);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.5;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Typography - Newspaper Style */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: var(--text-primary);
+  background-clip: unset;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 3px double var(--text-primary);
+  padding-bottom: 0.5rem;
+}
+
+p {
+  color: var(--text-secondary);
+  font-family: 'Source Serif 4', Georgia, serif;
+}
+
+/* Links */
+a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: opacity 0.2s ease;
+}
+
+a:hover {
+  opacity: 0.7;
+}
+
+/* Buttons - Sophisticated print style */
+button {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid var(--text-primary);
+  border-radius: 4px;
+  /* Updated from 0 */
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: none;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+button:hover {
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  transform: none;
+  box-shadow: none;
+}
+
+button:active {
+  transform: none;
+}
+
+/* Remove default focus outline, add custom */
+:focus-visible {
+  outline: 1px solid var(--text-primary);
+  outline-offset: 2px;
+}
