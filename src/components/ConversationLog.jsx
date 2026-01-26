@@ -43,10 +43,7 @@ export const ConversationLog = ({ conversation, currentPendingPrompt }) => {
                 );
             })}
 
-            {/* Pending Prompt Preview (if any) - Optional, mainly for debugging or showing 'what next' */}
-            {/* We can show it as a semi-transparent 'next' item if we want, or just rely on the Conversation flow */}
-            {/* The user request implied 'Underneath the query sent it needs to say the response' which implies a log */}
-
+            
             <div ref={endRef} />
         </div>
     );

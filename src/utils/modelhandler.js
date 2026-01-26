@@ -3,17 +3,12 @@ import { initOpenAI, getOpenAIMove } from "./handlers/OpenAIHandler";
 import { initClaude, getClaudeMove } from "./handlers/ClaudeHandler";
 import { getRandomMove } from "./handlers/RandomHandler";
 
-/**
- * Model Handler - Manages LLM/AI move generation
- */
-
-// Dispatcher for Moves
 export const getMove = async (tracker, model = "random", queryFormat = "fen") => {
   const legalMoves = tracker.getLegalMoves();
   if (legalMoves.length === 0) return null;
 
   switch (model) {
-    case "gemini-pro": // Actually maps to gemini-2.5-flash inside handler per user request
+    case "gemini-pro": 
       return getGeminiMove(tracker, model, queryFormat);
 
     case "gpt-4":
@@ -30,7 +25,7 @@ export const getMove = async (tracker, model = "random", queryFormat = "fen") =>
   }
 };
 
-// Dispatcher for Initialization
+// Dispatcher for init 
 export const initModel = async (model, apiKey) => {
   console.log(`[ModelHandler] Initializing ${model}...`);
   
@@ -51,9 +46,7 @@ export const initModel = async (model, apiKey) => {
   return true;
 };
 
-/* -------------------------------------------------------------------------- */
-/*                               Shared Utilities                             */
-/* -------------------------------------------------------------------------- */
+
 
 export const formatBoardState = (tracker, format = "fen") => {
   switch (format) {

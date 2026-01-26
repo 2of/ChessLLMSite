@@ -13,44 +13,36 @@ export const useGame = () => {
 };
 
 export const GameProvider = ({ children }) => {
-    /* -------------------------------------------------------------------------- */
-    /*                                State Definition                            */
-    /* -------------------------------------------------------------------------- */
+
     const trackerRef = useRef(new ChessTracker());
 
-    // Game Configuration
-    const [playerColor, setPlayerColor] = useState("w"); // 'w' or 'b'
+    
+    const [playerColor, setPlayerColor] = useState("w"); 
     const [selectedModel, setSelectedModel] = useState("random");
-    const [modelStatus, setModelStatus] = useState("ready"); // 'initializing', 'ready', 'error'
+    const [modelStatus, setModelStatus] = useState("ready"); 
     const [queryFormat, setQueryFormat] = useState("fen");
     const [promptMode, setPromptMode] = useState("full");
 
-    // Game State
+    
     const [board, setBoard] = useState(trackerRef.current.getCurrentBoard());
     const [moveHistory, setMoveHistory] = useState([]);
-    const [gameStatus, setGameStatus] = useState(null); // 'checkmate', 'draw', or null
-    const [conversation, setConversation] = useState([]); // [{ role, content, meta }]
-    const [currentPrompt, setCurrentPrompt] = useState({ type: "", content: "" }); // Still used for "Preview"
-    const [gameKey, setGameKey] = useState(0); // To force re-renders if needed, or identifying streams
+    const [gameStatus, setGameStatus] = useState(null); 
+    const [conversation, setConversation] = useState([]); 
+    const [currentPrompt, setCurrentPrompt] = useState({ type: "", content: "" }); 
+    const [gameKey, setGameKey] = useState(0); 
 
-    // UI State
+    
     const [isThinking, setIsThinking] = useState(false);
     const [viewingMoveIndex, setViewingMoveIndex] = useState(null);
     const [lastMove, setLastMove] = useState(null);
 
     const hasTriggeredInitialAI = useRef(false);
 
-    /* -------------------------------------------------------------------------- */
-    /*                                  Helpers                                   */
-    /* -------------------------------------------------------------------------- */
 
     const updateDisplay = useCallback(() => {
         const tracker = trackerRef.current;
         if (viewingMoveIndex !== null) {
-            // If we are viewing history, don't update board from 'current' state,
-            // but we might want to update history list.
-            // Actually, usually we only update display after a move, which implies we are at live.
-            // If we are viewing history, we shouldn't be making moves generally.
+          
         } else {
             setBoard(tracker.getCurrentBoard());
         }
@@ -59,13 +51,8 @@ export const GameProvider = ({ children }) => {
 
     const aiColor = playerColor === "w" ? "b" : "w";
 
-    /* -------------------------------------------------------------------------- */
-    /*                                  Effects                                   */
-    /* -------------------------------------------------------------------------- */
-
-    // Initialize Model when Changed
     useEffect(() => {
-        // Skip optional initialization for 'random' if we want, but sticking to consistency
+        
         const initialize = async () => {
             if (selectedModel === 'random') {
                 setModelStatus('ready');
@@ -74,7 +61,7 @@ export const GameProvider = ({ children }) => {
 
             setModelStatus('initializing');
             try {
-                // In future: pass API keys from env or user settings
+                
                 const success = await import('../utils/modelhandler').then(m => m.initModel(selectedModel));
                 if (success) {
                     setModelStatus('ready');
@@ -90,18 +77,18 @@ export const GameProvider = ({ children }) => {
         initialize();
     }, [selectedModel]);
 
-    /* -------------------------------------------------------------------------- */
-    /*                                  Actions                                   */
-    /* -------------------------------------------------------------------------- */
+   
+   
+   
 
     const makeAIMove = useCallback(async () => {
         const tracker = trackerRef.current;
 
-        // Safety checks
+        
         if (tracker.isGameOver()) return;
         if (tracker.turn() !== aiColor) return;
 
-        // Check Status
+        
         if (modelStatus !== 'ready') {
             console.warn("AI called but model not ready:", modelStatus);
             return;
@@ -109,10 +96,10 @@ export const GameProvider = ({ children }) => {
 
         setIsThinking(true);
 
-        // Capture the prompt that is being sent
+        
         const promptObj = buildSmartPrompt(tracker, queryFormat, promptMode, aiColor);
 
-        // Add User Prompt to Conversation
+        
         setConversation(prev => [...prev, {
             role: 'user',
             content: promptObj.content,
@@ -120,16 +107,16 @@ export const GameProvider = ({ children }) => {
         }]);
 
         try {
-            // Small delay for UX
+            
             await new Promise(resolve => setTimeout(resolve, 300));
 
-            // getMove now returns { raw, san }
+            
             const moveResult = await getMove(tracker, selectedModel, queryFormat);
 
             if (moveResult && moveResult.san) {
                 const { raw, san } = moveResult;
 
-                // Add Model Response to Conversation
+                
                 setConversation(prev => [...prev, {
                     role: 'model',
                     content: raw,
@@ -137,7 +124,7 @@ export const GameProvider = ({ children }) => {
                     timestamp: Date.now()
                 }]);
 
-                // Try to make the move, forcing it if necessary
+                
                 const result = tracker.makeForceMoveFromSan(san);
 
                 if (result && result.move) {
@@ -145,10 +132,10 @@ export const GameProvider = ({ children }) => {
 
                     if (isIllegal) {
                         console.warn("AI played illegal move. Forcing:", san);
-                        // Optional: Toaster notification here?
+                        
                     }
 
-                    // Update last move highlight
+                    
                     const files = "abcdefgh";
                     const fromRow = 8 - parseInt(move.from[1]);
                     const fromCol = files.indexOf(move.from[0]);
@@ -162,7 +149,7 @@ export const GameProvider = ({ children }) => {
 
                 } else {
                     console.error("Failed to execute move:", san);
-                    // Treat as error in conversation?
+                    
                     setConversation(prev => [...prev, {
                         id: Date.now() + 2,
                         role: 'error',
@@ -173,13 +160,13 @@ export const GameProvider = ({ children }) => {
                     setIsThinking(false);
                     return;
                 }
-                // Update last move highlight happens automatically when we set board state via tracker
-                // But we want to explicitly set lastMove for UI
-                // Note: tracker.makeMove or makeForceMoveFromSan already updates tracker history
+                
+                
+                
 
             } else {
-                // getMove didn't return a valid SAN object.
-                // Show the raw response if we have it, so the user knows what the AI said.
+                
+                
                 if (moveResult && moveResult.raw) {
                     setConversation(prev => [...prev, {
                         role: 'model',
@@ -202,11 +189,11 @@ export const GameProvider = ({ children }) => {
                 return;
             }
 
-            // Update state
+            
             updateDisplay();
             setViewingMoveIndex(null);
 
-            // Check game over
+            
             if (tracker.isGameOver()) {
                 setGameStatus(tracker.isCheckmate() ? 'checkmate' : 'draw');
             }
@@ -250,7 +237,7 @@ export const GameProvider = ({ children }) => {
             if (tracker.isGameOver()) {
                 setGameStatus(tracker.isCheckmate() ? 'checkmate' : 'draw');
             } else {
-                // Trigger AI
+                
                 setTimeout(() => makeAIMove(), 100);
             }
             return true;
@@ -264,7 +251,7 @@ export const GameProvider = ({ children }) => {
         setLastMove(null);
         setViewingMoveIndex(null);
         setCurrentPrompt({ type: "", content: "" });
-        setConversation([]); // Clear conversation
+        setConversation([]); 
         setIsThinking(false);
         setMoveHistory([]);
         setBoard(trackerRef.current.getCurrentBoard());
@@ -288,45 +275,33 @@ export const GameProvider = ({ children }) => {
         setBoard(trackerRef.current.getCurrentBoard());
     }, []);
 
-    // Update Prompt when state changes
-    useEffect(() => {
-        // We only update prompt if we are not thinking (or maybe we do want to see it change while thinking? usually thinking blocks changes)
-        // And if game is not over?
-        // The requirement is "update when settings change".
-        // Also update when board state changes (which implies turn change).
 
-        // We need to know who's turn it is to generate prompt
+    useEffect(() => {
+
         const tracker = trackerRef.current;
 
-        // Only generate prompt if there is a next move to be made by AI?
-        // Or just "What WOULD the prompt be?"
-        // Usually we show the prompt for the UPCOMING move.
-        // If it is player turn, we show prompt for AI? Key is "Model Query".
-        // So we should show the prompt that WILL be sent when AI moves.
-        // This is most relevant when it IS AI turn or about to be.
-        // But user wants to see it to debug.
 
         const prompt = buildSmartPrompt(tracker, queryFormat, promptMode, aiColor);
         setCurrentPrompt(prompt);
 
-    }, [queryFormat, promptMode, aiColor, board, selectedModel]); // Dependencies that affect prompt content
+    }, [queryFormat, promptMode, aiColor, board, selectedModel]); 
 
-    // Initial AI Move Effect
+    
     useEffect(() => {
         const tracker = trackerRef.current;
         if (playerColor === 'b' && tracker.turn() === 'w' && !hasTriggeredInitialAI.current && !tracker.isGameOver()) {
             hasTriggeredInitialAI.current = true;
-            // Small delay to ensure render
+            
             setTimeout(() => makeAIMove(), 500);
         }
     }, [playerColor, gameKey, makeAIMove]);
 
-    /* -------------------------------------------------------------------------- */
-    /*                                  Expose                                    */
-    /* -------------------------------------------------------------------------- */
+   
+   
+   
 
     const value = {
-        // State
+        
         playerColor,
         selectedModel,
         modelStatus,
@@ -342,18 +317,18 @@ export const GameProvider = ({ children }) => {
         lastMove,
         gameKey,
 
-        // Setters (Configuration)
+        
         setPlayerColor,
         setSelectedModel,
         setQueryFormat,
         setPromptMode,
 
-        // Actions
+        
         makePlayerMove,
         resetGame,
         viewMove,
         returnToLive,
-        trackerRef // exposed if needed for advanced things like getLegalMoves
+        trackerRef 
     };
 
     return (
