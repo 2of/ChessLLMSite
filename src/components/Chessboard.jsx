@@ -5,14 +5,14 @@ import { useGame } from "../context/GameContext";
 
 const Chessboard = () => {
   const {
-    // State
+    
     board,
     playerColor,
     isThinking,
     viewingMoveIndex,
     lastMove,
 
-    // Actions
+    
     makePlayerMove,
     trackerRef,
     returnToLive
@@ -42,9 +42,9 @@ const Chessboard = () => {
 
     const clickedPiece = board[row][col];
     const files = "abcdefgh";
-    // const toSquare = files[col] + (8 - row); // Unused until move
+    
 
-    // If clicking on a possible move, make the move
+    
     if (selected && possibleMoves.some((m) => m.row === row && m.col === col)) {
       const fromSquare = files[selected.col] + (8 - selected.row);
       const toSquare = files[col] + (8 - row);
@@ -60,7 +60,7 @@ const Chessboard = () => {
       return;
     }
 
-    // If clicking on own piece, select it and show moves
+    
     if (clickedPiece) {
       const isWhitePiece = clickedPiece === clickedPiece.toUpperCase();
       const isPlayerPiece = (playerColor === 'w' && isWhitePiece) ||
@@ -74,16 +74,16 @@ const Chessboard = () => {
       }
     }
 
-    // Deselect if clicking elsewhere
+    
     setSelected(null);
     setPossibleMoves([]);
   }, [board, selected, possibleMoves, viewingMoveIndex, isThinking, playerColor, getLegalMovesForSquare, makePlayerMove, trackerRef]);
 
-  // Clear selection if board changes (e.g. AI moved)
+  
   useEffect(() => {
-    // Optional: could clear selection here just in case.
-    // setSelected(null);
-    // setPossibleMoves([]);
+    
+    
+    
   }, [board]);
 
   return (
